@@ -9,6 +9,7 @@
 //          3) print output
 
 #include <stdio.h>
+#include <stddef.h>
 
 int main(int argc,char *argv[]){
     FILE *f;
@@ -19,7 +20,7 @@ int main(int argc,char *argv[]){
         fscanf(f,"%d",&M);
         fscanf(f,"%d",&N);
         int A[1000000], B[1000000];
-        while( (c = fgetc(f)) != "\n");
+        while( (c = fgetchar(f)) != "\n");
         for(int i=0;i<M;i++){
             fscanf(f,"%d ",&day);
             sum+=day;
