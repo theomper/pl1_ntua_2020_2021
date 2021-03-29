@@ -1,3 +1,13 @@
+// FILENAME : longest.c
+// DESCRIPTION : exerc21-1 / pl1-ntua
+// AUTHOR : Alex Tsaf & Theo Mper
+// COMPILE COMMAND : gcc -std=c99 -Wall -Werror -O3 -o longest longest.c
+// EXECUTE COMMAND : ./longest input.file
+// EXTERNAL USED CODE : 
+// TO-DO :  1) read input
+//          2) find solution
+//          3) print output
+
 #include <stdio.h>
 
 int main(int argc,char *argv[]){
