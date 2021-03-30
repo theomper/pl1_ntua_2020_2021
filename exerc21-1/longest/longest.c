@@ -59,7 +59,7 @@ long int find_solution(long int number_of_days, int number_of_hospitals, long in
             return (end - start);
         }
     }
-
+    //if the loop ends, it means there isn't a "good" period
     return (0);
 }
 
