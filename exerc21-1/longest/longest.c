@@ -45,8 +45,14 @@ long int find_solution(long int number_of_days, int number_of_hospitals, long in
     start = 0;
     end = number_of_days - 1;
 
+
     while (start <= end) {
-        average = (sums[end] - sums[start]) / ((end - start + 1) * number_of_hospitals);
+        if (start == 0) {
+            average = sums[end] / ((end - start + 1) * number_of_hospitals);
+        }
+        else {
+            average = (sums[end] - sums[start - 1]) / ((end - start + 1) * number_of_hospitals);
+        }
         if (average > -1) {
             if (days[end] >= days[start]) {
                 end--;
@@ -56,10 +62,12 @@ long int find_solution(long int number_of_days, int number_of_hospitals, long in
             }
         }
         else {
-            return (end - start);
+            printf("Start: %li and End: %li\n", start, end);
+            return (end - start + 1);
         }
     }
     //if the loop ends, it means there isn't a "good" period
+    printf("Start: %li and End: %li\n", start, end);
     return (0);
 }
 
@@ -121,18 +129,18 @@ int main(int argc,char *argv[]) {
 
 
     // testing
-    // printf("Number of days %li\n", number_of_days);
-    // printf("Number of hospitals %d\n", number_of_hospitals);
-    // printf("Number of patients getting in or out:\n");
-    // for (i = 0; i < number_of_days; i++) {
-    //     printf("%li ", days[i]);
-    // }
-    // printf("\n");
-    // printf("Array of sums:\n");
-    // for (i = 0; i < number_of_days; i++) {
-    //     printf("%li ", sums[i]);
-    // }
-    // printf("\n");
+    printf("Number of days %li\n", number_of_days);
+    printf("Number of hospitals %d\n", number_of_hospitals);
+    printf("Number of patients getting in or out:\n");
+    for (i = 0; i < number_of_days; i++) {
+        printf("%li\t", days[i]);
+    }
+    printf("\n");
+    printf("Array of sums:\n");
+    for (i = 0; i < number_of_days; i++) {
+        printf("%li\t", sums[i]);
+    }
+    printf("\n");
 
     // freeing memory
     free(days);
