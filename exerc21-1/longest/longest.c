@@ -45,7 +45,7 @@ long int max_index_diff(long int number_of_days, long int *days) {
     // This process is similar to merge() of MergeSort
     i = 0, j = 0, max_diff = -1;
     while (j < number_of_days && i < number_of_days) {
-        if (l_min[i] < r_max[j]) {
+        if (l_min[i] <= r_max[j]) {
             max_diff = max(max_diff, j - i);
             j = j + 1;
         }
@@ -70,6 +70,7 @@ void calc_prefix(long int number_of_days, long int *days) {
     for (int i = 0; i < number_of_days; i++) {
         sum += days[i];
         days[i] = sum;
+        // days[i] = -days[i];
     }
 }
 // Function to find the length of the longest subarray with average >= x
@@ -82,7 +83,15 @@ long int longest_subarray(long int number_of_days, int number_of_hospitals, long
     res = 0;
 
     modify_days(number_of_days, number_of_hospitals, days);
+    // for (int i = 0; i < number_of_days; i++) {
+    //     printf("%li\t", days[i]);
+    // }
+    // printf("\n");
     calc_prefix(number_of_days, days);
+    // for (int i = 0; i < number_of_days; i++) {
+    //     printf("%li\t", days[i]);
+    // }
+    // printf("\n");
 
     res = max_index_diff(number_of_days, days);
 
@@ -134,7 +143,14 @@ int main(int argc,char *argv[]) {
     // close input file
     fclose(fp);
 
+    // for (i = 0; i < number_of_days; i++) {
+    //     printf("%li\t", days[i]);
+    // }
+    // printf("\n");
     // call find solution function
+    for (int i = 0; i < number_of_days; i++) {
+        days[i] = -days[i];
+    }
     result = longest_subarray(number_of_days, number_of_hospitals, days);
     printf("%li\n", result);
 
