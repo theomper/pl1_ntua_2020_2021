@@ -18,7 +18,7 @@ int fairbox(int ix, int jx, int rows, int columns) {
         fairness[ix][jx] = 0;
         return 0;
     }
-      if (fairness[ix][jx] != -1) {
+    if (fairness[ix][jx] != -1) {
         return fairness[ix][jx];
     }
 
@@ -33,19 +33,19 @@ int fairbox(int ix, int jx, int rows, int columns) {
   
     switch (rooms[ix][jx]) {
         case 'U':visited[ix][jx] = 1;
-        	fairness[ix][jx] = fairbox(ix - 1, jx, rows, columns);
+            fairness[ix][jx] = fairbox(ix - 1, jx, rows, columns);
                     return fairness[ix - 1][jx];
                     break;
         case 'D':  visited[ix][jx] = 1;
-        	 fairness[ix][jx] = fairbox(ix + 1, jx, rows, columns);
+            fairness[ix][jx] = fairbox(ix + 1, jx, rows, columns);
                     return fairness[ix + 1][jx];
                     break;
         case 'L':   visited[ix][jx] = 1;
-        	fairness[ix][jx] = fairbox(ix, jx - 1, rows, columns);
+            fairness[ix][jx] = fairbox(ix, jx - 1, rows, columns);
                     return fairness[ix][jx - 1];
                     break;
         case 'R':   visited[ix][jx] = 1;
-		     fairness[ix][jx] = fairbox(ix, jx + 1, rows, columns);
+            fairness[ix][jx] = fairbox(ix, jx + 1, rows, columns);
                     return fairness[ix][jx + 1];
                     break;
         default: break;
