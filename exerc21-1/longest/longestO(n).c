@@ -35,22 +35,22 @@ long int max_index_diff(long int number_of_days, long int *days, long int *prefi
     for (i = 1; i < number_of_days; ++i) {
         l_min[i] = min(prefix_sum[i], l_min[i - 1]);
     }
-    printf("Lmin[]:\n");
-    for (int i = 0; i < number_of_days; i++) {
-        printf("%li\t", l_min[i]);
-    }
-    printf("\n");
+    //printf("Lmin[]:\n");
+    // for (int i = 0; i < number_of_days; i++) {
+    //     printf("%li\t", l_min[i]);
+    // }
+    // printf("\n");
 
     // Construct r_max[] such that r_max[j] stores the maximum value from (arr[j], arr[j+1], ..arr[n-1])
     r_max[number_of_days - 1] = prefix_sum[number_of_days - 1];
     for (j = number_of_days - 2; j >= 0; --j) {
         r_max[j] = max(prefix_sum[j], r_max[j + 1]);
     }
-    printf("Rmax[]:\n");
-    for (int i = 0; i < number_of_days; i++) {
-        printf("%li\t", r_max[i]);
-    }
-    printf("\n");
+    // printf("Rmax[]:\n");
+    // for (int i = 0; i < number_of_days; i++) {
+    //     printf("%li\t", r_max[i]);
+    // }
+    // printf("\n");
     // Traverse both arrays from left to right to find optimum j - i
     // This process is similar to merge() of MergeSort
     i = 0, j = 0, max_diff = -1;
@@ -83,11 +83,11 @@ void modify_days(long int number_of_days, int number_of_hospitals, long int *day
     for (int i = 0; i < number_of_days; i++) {
         days[i] = days[i] - number_of_hospitals;
     }
-    printf("Minus Input AND Minus Hospitals:\n");
-    for (int i = 0; i < number_of_days; i++) {
-        printf("%li\t", days[i]);
-    }
-    printf("\n");
+    // printf("Minus Input AND Minus Hospitals:\n");
+    // for (int i = 0; i < number_of_days; i++) {
+    //     printf("%li\t", days[i]);
+    // }
+    // printf("\n");
 }
 
 // Calculating the prefix sum array of the modified array
@@ -98,11 +98,11 @@ void calc_prefix(long int number_of_days, long int *days, long int *prefix_sum) 
         prefix_sum[i] = sum;
         // days[i] = -days[i];
     }
-    printf("Prefix Sums[]:\n");
-    for (int i = 0; i < number_of_days; i++) {
-        printf("%li\t", prefix_sum[i]);
-    }
-    printf("\n");
+    // printf("Prefix Sums[]:\n");
+    // for (int i = 0; i < number_of_days; i++) {
+    //     printf("%li\t", prefix_sum[i]);
+    // }
+    // printf("\n");
 }
 // Function to find the length of the longest subarray with average >= x
 long int longest_subarray(long int number_of_days, int number_of_hospitals, long int *days) {
@@ -142,12 +142,14 @@ int main(int argc,char *argv[]) {
     fp = fopen(argv[1], "r");
     if (fp == NULL) {
         printf("Error Reading File\n");
+        return 0;
     }
 
     // read how many are the numbers
     ret = fscanf(fp, "%li", &number_of_days);
     if (ret == 0) {
         printf("No numbers!\n");
+        return 0;
     }
 
     // malloc for N times memory slots
@@ -165,6 +167,7 @@ int main(int argc,char *argv[]) {
     ret = fscanf(fp, "%d", &number_of_hospitals);
     if (ret == 0) {
         printf("No hospitals!\n");
+        return 0;
     }
 
     // read numbers and powers
@@ -175,28 +178,28 @@ int main(int argc,char *argv[]) {
     // close input file
     fclose(fp);
 
-    printf("Input:\n");
-    for (i = 0; i < number_of_days; i++) {
-        printf("%li\t", days[i]);
-    }
-    printf("\n");
+    // printf("Input:\n");
+    // for (i = 0; i < number_of_days; i++) {
+    //     printf("%li\t", days[i]);
+    // }
+    // printf("\n");
     // call find solution function
     for (int i = 0; i < number_of_days; i++) {
         days[i] = -days[i];
     }
-    printf("Minus Input:\n");
-    for (i = 0; i < number_of_days; i++) {
-        printf("%li\t", days[i]);
-    }
-    printf("\n");
+    // printf("Minus Input:\n");
+    // for (i = 0; i < number_of_days; i++) {
+    //     printf("%li\t", days[i]);
+    // }
+    // printf("\n");
     
     result = longest_subarray(number_of_days, number_of_hospitals, days);
-    printf("Output:\n");
+    // printf("Output:\n");
     printf("%li\n", result);
 
     // testing
-    printf("Number of days %li\n", number_of_days);
-    printf("Number of hospitals %d\n", number_of_hospitals);
+    // printf("Number of days %li\n", number_of_days);
+    // printf("Number of hospitals %d\n", number_of_hospitals);
     // printf("Number of patients getting in or out:\n");
     // for (i = 0; i < number_of_days; i++) {
     //     printf("%li\t", days[i]);
