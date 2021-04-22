@@ -15,6 +15,12 @@ fun reverse xs =
         rev (xs, nil)
     end
 
+fun max a b =
+    if a > b then a else b;
+
+fun min a b =
+    if a < b then a else b;
+
 (* Input parse code by Stavros Aronis, modified by Nick Korasidis. *)
 fun parse file =
     let
@@ -36,12 +42,37 @@ fun parse file =
     in
         (n, hospitals, readInts n [])
     end
+
 (* "main" function *)
 fun longest file =
     let
         val input = parse file
-        (* val rev_days = reverse days
-        val N = length days *)
+        val number_of_days = #1 input
+        val hospitals = #2 input
+        val rev_days = reverse (#3 input)
+        val rev_days = map (fn x => ~x) rev_days
+        val rev_days = map (fn x => x - hospitals) rev_days
+        fun prefixsums xs =
+            let
+                fun prefix (nil, pr, z) = z
+                  | prefix (ys, pr, nil) = prefix (ys, pr, pr::[])
+                  | prefix (y::ys, pr, z) = prefix (ys, pr + y, (pr + y)::z)
+            in
+                prefix (tl xs, hd xs, nil)
+            end
+        val rev_days = prefixsums rev_days
+        val rev_days = reverse rev_days
+        fun lmin xs =
+            let
+                fun lm (nil, pr, z) = z
+                  | lm (ys, pr, nil) = lm (ys, pr, pr::[])
+                  | lm (y::ys, pr, z) = lm (ys, if (length ys <> 0) then hd ys else 0, (min y (hd z))::z)
+            in
+                lm (tl xs, hd xs, nil)
+            end
+        val lmins = lmin rev_days
+        val lmins = reverse lmins
     in
-        Control.Print.say((Int.toString(#1 input)) ^ " " ^ (Int.toString(#2 input)) ^ "\n")
+        Control.Print.say((Int.toString(number_of_days)) ^ " " ^ (Int.toString(hospitals)) ^ "\n");
+        rev_days
     end
