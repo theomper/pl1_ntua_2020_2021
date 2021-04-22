@@ -44,24 +44,60 @@ local
             (n, hospitals, readInts n [])
         end
 
-    fun prefixsums xs =
-        let
-            fun prefix (nil, pr, z) = z
-            | prefix (ys, pr, nil) = prefix (ys, pr, pr::[])
-            | prefix (y::ys, pr, z) = prefix (ys, pr + y, (pr + y)::z)
-        in
-            prefix (tl xs, hd xs, nil)
+    fun prefixsums [] = []
+        | prefixsums (x::[]) = []
+        | prefixsums (x::y::[]) = [x,x+y]
+        | prefixsums (x::y::l) = (x::(prefixsums ((x+y)::l)))
+
+
+
+    fun lmin [] = []
+        | lmin (x::[]) = [x]
+        | lmin (x::y::l) = x::lmin ((min x y)::l)
+
+    fun rmax [] = []
+        | rmax (x::[]) = [x]
+        | rmax (x::y::l) = x::rmax ((max x y)::l)
+
+
+    fun find_longest (i, j, lm, rm, diff, days, maxi, maxj) =
+            if ((i >= days) orelse (j >= days)) then ((diff + 1), maxi, maxj) 
+            else (
+                if ((hd lm) < (hd rm)) 
+                then (
+                    if ((max diff (j-i)) = (j-i)) 
+                        then (
+                            find_longest (i, (j+1), lm, (tl rm), (max diff (j-i)), days, i, j)
+                        )
+                    else (
+                        find_longest (i, (j+1), lm, (tl rm), (max diff (j-i)), days, maxi, maxj)
+                    )
+                )
+                else (
+                    find_longest ((i+1), j,(tl lm), rm, diff, days, maxi, maxj)
+                )
+            )   
+
+    fun bypass (minl, maxr, n, prefix) =
+        let 
+         val (a,b,c) = find_longest (0, 0, minl, maxr, ~1, n, 0, 0)
+         val prefix_sum = Array.fromList(prefix)
+         val x = if (b = 0) then Array.sub(prefix_sum,b) else Array.sub(prefix_sum,b-1)
+         val y = Array.sub(prefix_sum,c)
+         in
+         if (((b <> 0) andalso (y < x)) orelse (b = 0) andalso (y < 0)) 
+            then (
+                a-1
+            )
+        else (
+            a
+        )
         end
 
-    fun lmin xs =
-        let
-            fun lm (nil, pr, z) = z
-            | lm (ys, pr, nil) = lm (ys, pr, pr::[])
-            | lm (y::ys, pr, z) = lm (ys, if (length ys <> 0) then hd ys else 0, (min y (hd z))::z)
-        in
-            lm (tl xs, hd xs, nil)
-        end
+            
+            
 
+           
 
 (* "main" function *)
 in
@@ -74,11 +110,14 @@ in
             val rev_days = map (fn x => ~x) rev_days
             val rev_days = map (fn x => x - hospitals) rev_days
             val rev_days = prefixsums rev_days
+            val LMin = lmin rev_days
             val rev_days = reverse rev_days
-            val lmins = lmin rev_days
-            val lmins = reverse lmins
+            val RMax = rmax rev_days
+            val rev_days = reverse rev_days
+            val RMax = reverse RMax 
+            val result = bypass (LMin, RMax, number_of_days, rev_days)
         in
-            Control.Print.say((Int.toString(number_of_days)) ^ " " ^ (Int.toString(hospitals)) ^ "\n");
-            rev_days
+            (* Control.Print.say((Int.toString(number_of_days)) ^ " " ^ (Int.toString(hospitals)) ^ "\n"); *)
+            print(Int.toString(result)^"\n")
         end
 end
