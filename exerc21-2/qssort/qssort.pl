@@ -9,24 +9,29 @@ read_line(Stream, L) :-
     atomic_list_concat(Atoms, ' ', Atom),
     maplist(atom_number, Atoms, L).
 
-initial(config(Queue, Stack), File) :-
+states(config(Queue, Stack), config(Queue1, Stack1), File) :-
     read_input(File, _N, Queue),
-    Stack = [].
-
-final(config(Queue, Stack), File) :-
-    read_input(File, _N, Temp),
-    msort(Temp, Queue),
-    Stack = [].
-
+    msort(Queue, Queue1),
+    Stack = [],
+    Stack1 = [].
 
 move(config([H|Tail],S1), config(L2,S2), 'Q') :-
     L2 = Tail,
     S2 = [H|S1].
 move(config(L1, S1), config(L2, S2), 'S') :-
-    (S1 = [Elem|_] -> 
-        append(L1, [Elem], L2),
-        append([Elem], S2, S1)).
+    (S1 = [Elem|Tail] -> 
+        % append(L1, [Elem], L2),
+        L2 = [L1|Elem], 
+        S2 = Tail).
 
+append_init(Marker-Marker).
+append_end(List-[E|NMarker], E, List-NMarker).
+append_finish(List-[],List).
+
+check(L1, L2, Elem) :-
+    append_init(L1),
+    append_end(L1, Elem, Temp1),
+    append_finish(Temp1, L2).
 
 solve(Conf, [], Final) :- Conf = Final.
 solve(Conf, [Move|Moves], Final) :-
@@ -34,12 +39,11 @@ solve(Conf, [Move|Moves], Final) :-
     solve(Conf1, Moves, Final).
 
 solve(File, Answer) :-
-    initial(InitialConf, File),
-    final(FinalConf, File),
+    states(InitialConf, FinalConf, File),
     (InitialConf = FinalConf -> Moves = ['e','m','p','t','y'], atomics_to_string(Moves, Answer)
     ; length(Moves,_),
     solve(InitialConf, Moves, FinalConf),
     atomics_to_string(Moves, Answer)).
 
-longest(File, Answer) :-
+qssort(File, Answer) :-
     once(solve(File, Answer)).
