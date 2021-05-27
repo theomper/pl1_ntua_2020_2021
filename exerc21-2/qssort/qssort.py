@@ -9,52 +9,86 @@ fp = open(sys.argv[1],'r')
 N = int(fp.readline())
 
 # Queue Initialization
-queue = list(map(int, fp.readline().split()))
+queue = tuple(map(int, fp.readline().split()))
 
 valid = ['Q', 'S']
-move = 'S'
-initial_conf = queue, [], ""
-sorted_queue = sorted(queue)
-final_conf = sorted_queue, [], move
+initial_conf = queue, (), ''
+sorted_queue = tuple(sorted(queue))
+final_conf = sorted_queue, (), 'S'
 
-# print(N, initial_conf, final_conf)
+print(initial_conf, final_conf)
 
 def next(s):
     global valid
     if not s[1]:
-        s[1].append(s[0].pop(0)) #Q Move
-        s[2].append("Q")
+        stack = list(s[1])
+        queue = list(s[0])
+        ret = queue.pop(0)
+        stack.append(ret)
+        move = 'Q'
+        #print(s[0], s[1], 'Q move to empty stack', tuple(queue), tuple(stack))
+        yield tuple(queue), tuple(stack), move
     elif not s[0]:
-        s[0].append(s[1].pop())  #S Move
-        s[2].append("S")
+        stack = list(s[1])
+        queue = list(s[0])
+        ret = stack.pop()
+        queue.append(ret)
+        move = 'S'
+        #print(s[0], s[1], 'S move to non-empty queue', tuple(queue), tuple(stack))
+        yield tuple(queue), tuple(stack), move
     else :
         for i in valid:
             if i == 'Q':
-                s[1].append(s[0].pop(0)) #Q Move
-                s[2].append("Q")
+                stack = list(s[1])
+                queue = list(s[0])
+                ret = queue.pop(0)
+                stack.append(ret)
+                move = 'Q'
+                #print(s[0], s[1], 'Q move to non-empty stack', tuple(queue), tuple(stack))
             else :
-                s[0].append(s[1].pop())  #S Move
-                s[2].append("S")
-        yield s[0], s[1], s[2]
+                stack = list(s[1])
+                queue = list(s[0])
+                ret = stack.pop()
+                queue.append(ret)
+                move = 'S'
+                #print(s[0], s[1], 'S move to non-empty queue', tuple(queue), tuple(stack))
+        yield tuple(queue), tuple(stack), move
 
 
 Q = deque([initial_conf])
 previous = {initial_conf: None}
 solved = False
+moves = [(initial_conf, tuple(next(initial_conf)))]
 
-
-while Q:
-    s = Q.popleft()
-    if (s[0] == final_conf):
+for pair in moves:
+    print('Previous:',pair[0], 'Possible:', pair[1])
+    if pair[0] == final_conf[0]:
         solved
         break
-    for t in next(s):
-        if t not in previous: 
-            Q.append(t)
+    for s in pair[1]:
+        if s not in previous:
+            t = tuple(next(s))
+            moves.append((s,t))
             previous[t] = s
+
+    
+
+# while Q:
+#     s = Q.popleft()
+#     if (s[0] == final_conf[0]):
+#         print('Ending!')
+#         solved
+#         break
+#     print('Possible moves from', s, ' are:', tuple(next(s)))
+#     for t in next(s):
+#         print('State :', t)
+#         if t not in previous:
+#             print('State added!')
+#             Q.append(t)
+#             previous[t] = s
 
 
 if solved:
     while s:
         print(s)
-        s = prev[s]
+        s = previous[s]
