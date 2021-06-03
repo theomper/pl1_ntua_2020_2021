@@ -45,6 +45,8 @@ def next(s):
                 stack = list(s[1])
                 queue = list(s[0])
                 ret = stack.pop()
+                if (ret == queue[0]) : 
+                    continue
                 queue.append(ret)
                 move = 'S'
                 yield tuple(queue), tuple(stack), move
