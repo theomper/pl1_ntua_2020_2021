@@ -49,8 +49,6 @@ local
         | prefixsums (x::y::[]) = [x,x+y]
         | prefixsums (x::y::l) = (x::(prefixsums ((x+y)::l)))
 
-
-
     fun lmin [] = []
         | lmin (x::[]) = [x]
         | lmin (x::y::l) = x::lmin ((min x y)::l)
