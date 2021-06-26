@@ -23,11 +23,6 @@ move(config(L1, [Elem|Tail]), config(L2, S2), 'S') :-
         append(L1, [Elem], L2),
         S2 = Tail).
 
-% solve(Conf, [], Final) :- Conf = Final.
-% solve(Conf, [Move|Moves], Final) :-
-%     move(Conf, Conf1, Move),
-%     solve(Conf1, Moves, Final).
-
 solve(Conf, [], Final, _,_) :- Conf = Final.
 solve(Conf, [Move|Moves], Final, Qcounter, Length) :-
     (Check is Length/2 , Qcounter =< Check ->
