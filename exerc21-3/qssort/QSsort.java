@@ -10,26 +10,46 @@ import java.util.*;
 import java.io.*;
 
 
+
+
 public class QSsort {
+  
+  
+  public QSsort(String[] args) {
+    this.readInput(args);
+  
+  
+    // The name of the file to open.
+    File inputFile = new File(args[0]);
+  }
 
-
-    public QSsort(String[] args) {
-        this.readInput(args);
+  public static void main(String[] args) {
+    QSsort qssort = new QSsort(args);
+    qssort.findSol();
+  }
+    
+  public void findSol() {
+  }
+  
+  Solver solver = new BFSolver();
+  State initial = new GoatState(false, false, false, false, null);
+  State result = solver.solve(initial);
+  if (result == null) {
+    System.out.println("No solution found.");
+  } else {
+    printSolution(result);
+  }
+  
+  
+  // A recursive function to print the states from the initial to the final.
+  private static void printSolution(State s) {
+    if (s.getPrevious() != null) {
+      printSolution(s.getPrevious());
     }
-
-    // readInput()
-    // some code for this method copied from
-    // https://www.reddit.com/r/javaexamples/comments/344kch/reading_and_parsing_data_from_a_file/
-    public void readInput(String[] args) {
-        // The name of the file to open.
-        File inputFile = new File(args[0]);
-    }
-
-    public void findSol() {
-    }
-
-    public static void main(String[] args) {
-        QSsort qssort = new QSsort(args);
-        qssort.findSol();
-    }
+    System.out.println(s);
+  }
+  
 }
+
+
+
