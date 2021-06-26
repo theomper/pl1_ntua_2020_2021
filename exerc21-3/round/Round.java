@@ -1,8 +1,8 @@
-// FILENAME : QSsort.java
+// FILENAME : Round.java
 // DESCRIPTION : exerc21-3 / pl1-ntua
 // AUTHOR : Theo Mper, Alex Tsaf
-// COMPILE COMMAND : javac QSsort.java
-// RUN COMMAND: java QSsort "input_file_path"
+// COMPILE COMMAND : javac Round.java
+// RUN COMMAND: java Round "input_file_path"
 // TO-DO : 1)
 //
 
@@ -10,10 +10,10 @@ import java.util.*;
 import java.io.*;
 
 
-public class QSsort {
+public class Round {
 
 
-    public QSsort(String[] args) {
+    public Round(String[] args) {
         this.readInput(args);
     }
 
@@ -29,7 +29,7 @@ public class QSsort {
     }
 
     public static void main(String[] args) {
-        QSsort qssort = new QSsort(args);
-        qssort.findSol();
+        Round round = new Round(args);
+        round.findSol();
     }
 }
