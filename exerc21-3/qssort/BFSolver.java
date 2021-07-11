@@ -16,7 +16,7 @@ public class BFSolver implements Solver {
       State s = remaining.remove();
       if (s.isFinal()) return s;
       for (State n : s.next())
-        if (!seen.contains(n) && !n.isBad()){
+        if (!seen.contains(n)){
           remaining.add(n);
           seen.add(n);
         }
