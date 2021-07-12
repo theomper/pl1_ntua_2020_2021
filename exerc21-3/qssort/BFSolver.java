@@ -15,11 +15,12 @@ public class BFSolver implements Solver {
     while (!remaining.isEmpty()) {
       State s = remaining.remove();
       if (s.isFinal()) return s;
-      for (State n : s.next())
+      for (State n : s.next()){
         if (!seen.contains(n)){
           remaining.add(n);
           seen.add(n);
         }
+      }
     }
     return null;
   }

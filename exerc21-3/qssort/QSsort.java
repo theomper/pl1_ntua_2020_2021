@@ -10,7 +10,11 @@ import java.util.*;
 import java.io.*;
 
 public class QSsort {
-  
+  private Queue<Integer> initialqueue;
+  private Stack<Integer> initialstack;
+  private Queue<Integer> sortedqueue;
+  private StringBuilder output = new StringBuilder("");
+
   public QSsort(String[] args) {
     this.readInput(args);
   }
@@ -46,15 +50,17 @@ public class QSsort {
       // }
       int N;
       N = bufferedReader.read();
+      System.out.println(N);
       // we need to read a new line
       bufferedReader.read();
       // read line of numbers
       String line;
       line = bufferedReader.readLine();
+      System.out.println(line);
       String[] arrOfStr = line.split(" ", 0);
       int size = arrOfStr.length;
       int[] intarray = new int[size];
-      Queue<Integer> initialqueue = new LinkedList<Integer>(); 
+      initialqueue = new LinkedList<Integer>(); 
       for (int i = 0; i < size; i++) {
         // (this.q).enqueue(a);
         //  System.out.println(a);
@@ -63,10 +69,11 @@ public class QSsort {
         initialqueue.add(intarray[i]);
       }
       Arrays.sort(intarray);
+      sortedqueue = new LinkedList<Integer>(); 
       for (int a : intarray) {
         // (this.q).enqueue(a);
         // System.out.println(a);
-        initialqueue.add(a);
+        sortedqueue.add(a);
       }
       bufferedReader.close();
     }
@@ -83,49 +90,35 @@ public class QSsort {
   
   public static void main(String[] args) {
     QSsort qssort = new QSsort(args);
-    //qssort.findSol();
+    qssort.findSol();
   }
   
-  // public void findSol() {
-  // }
+  public void findSol() {
   
-  // Solver solver = new BFSolver();
-  // Stack<Integer> initialstack = new Stack<Integer>;
-  // Queue<Integer> finalqueue = 
-  // State initial = new QSState(initialqueue, false, false, false, null);
-  // State result = solver.solve(initial);
-  // if (result == null) {
-  //   System.out.println("No solution found.");
-  // } else {
-  //   printSolution(result);
-  // }
   
-  // // A recursive function to print the states from the initial to the final.
-  // private static void printSolution(State s) {
-  //   if (s.getPrevious() != null) {
-  //     printSolution(s.getPrevious());
-  //   }
-    
-  //   System.out.println(s);
-  // }
-  // Stack<Integer> initialstack = new Stack<Integer>;
-  // Queue<Integer> finalqueue = 
-  // State initial = new QSState(initialqueue, false, false, false, null);
-  // State result = solver.solve(initial);
-  // if (result == null) {
-  //   System.out.println("No solution found.");
-  // } else {
-  //   printSolution(result);
-  // }
-  
-  // // A recursive function to print the states from the initial to the final.
-  // private static void printSolution(State s) {
-  //   if (s.getPrevious() != null) {
-  //     printSolution(s.getPrevious());
-  //   }
-    
-  //   System.out.println(s);
-  // }
+  Solver solver = new BFSolver();
+  initialstack = new Stack<Integer>(); 
+  State initial = new QSState(initialqueue, initialstack, sortedqueue, null, '0');
+  State result = solver.solve(initial);
+  if (result == null) {
+    System.out.println("No solution found.");
+  } 
+  else {
+    String check = printSolution(result);
+    if (check == "") check = "empty";
+    System.out.println(check);
+  }
+}
+
+  // A recursive function to print the states from the initial to the final.
+  private String printSolution(State s) {
+    if (s.getPrevious() != null) {
+      printSolution(s.getPrevious());
+    }
+    if (s.getPrevious() == null) return "";
+    output.append(s.toString());
+    return output.toString();
+  }
 }
     
     
