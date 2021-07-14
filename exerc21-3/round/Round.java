@@ -76,7 +76,6 @@ public class Round {
         for (int i = 0; i < cities; i++) { 
             City ret = new City(initial, i, vehicles, cities);
             city_array[i] = ret;
-            // System.out.println(ret);
         }
         City best = new City(Integer.MAX_VALUE, 0, 0);
         for (City C : city_array) {
