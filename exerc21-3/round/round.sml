@@ -8,7 +8,7 @@
 
  local 
 
-    fun max a b =
+    fun compare a b =
         if a > b then a else b;
 
     fun printGridInt i N M grid =
@@ -63,31 +63,33 @@
             print(output)
         end
 
-    fun compute i j rows columns grid list sum linemax= (
-        if (i = rows)
-            then (grid)
-        else (
-            if (j = columns) then (Array2.update(grid, i, j, sum);
-                                Array2.update(grid, i, j + 1, linemax);
-                                compute (i+1) (0) (rows) (columns) (grid) (list) (0) (0)
-                            )
+
+    fun citylist (i, j, cities, vehicles, array, sum, maxmoves, list) = (
+        if (i = cities)
+        then (list)
+        else ( 
+            if (j = vehicles)
+            then (
+                citylist(i+1, 0, cities, vehicles, array, 0, 0, (sum, maxmoves, i)::list) 
+            )
             else (
-                if (i > Array.sub(list, j))
-                    then (Array2.update(grid, i, j, (i - Array.sub(list, j)));
-                        compute (i) (j+1) (rows) (columns) (grid) (list) (sum + i - Array.sub(list, j)) (max (linemax) (Array2.sub(grid, i, j)))
-                    )
-                else (Array2.update(grid, i, j, (columns + i - Array.sub(list, j)));
-                    compute i (j+1) (rows) (columns) (grid) (list) (sum + columns + i - Array.sub(list, j)) (max (linemax) (Array2.sub(grid, i, j)))
+                if (i >= Array.sub(array, j))
+                then (
+                    citylist(i, j+1, cities, vehicles, array, (sum + i - Array.sub(array, j)), (compare (maxmoves) (i - Array.sub(array, j))), list)
+                )
+                else (
+                    citylist(i, j+1, cities, vehicles, array, (sum + cities + i - Array.sub(array, j)), (compare (maxmoves) (cities + i - Array.sub(array, j))), list)
                 )
             )
         )
     )
 
-    (* fun max i j rows columns grid = 
-        let 
-            fun row_max i j sum = 
-                if (j = columns)  *)
-
+    fun best ([], sum, index) = (sum, index)
+        | best ((x, y, z)::list, sum, index) = (
+            if (((x < sum) andalso (2*y - x <= 1)) orelse ((x = sum) andalso (2*y - x <= 1) andalso (z < index)))
+            then (best(list, x, z))
+            else (best(list, sum, index))
+        )   
 
 (* "main" function *)
 in
@@ -98,11 +100,10 @@ in
             val vehicles = #2 input
             val positions = reverse (#3 input)
             val pos_array = Array.fromList(positions)
-            val city_array = Array2.array(cities, vehicles + 2, 0)
-            val city_moves = compute 0 0 cities vehicles city_array pos_array 0 0 
-
+            val city_array = citylist(0, 0, cities, vehicles, pos_array, 0, 0, [])
+            val int = valOf Int.maxInt
+            val (sum, index) = best(city_array, int, int) 
         in
-            (* Control.Print.say((Int.toString(number_of_days)) ^ " " ^ (Int.toString(hospitals)) ^ "\n"); *)
-            printGridInt 0 cities (vehicles + 2) city_moves
+            Control.Print.say((Int.toString(sum)) ^ " " ^ (Int.toString(index)) ^ "\n")
         end
 end  

@@ -36,34 +36,39 @@ public class QSState implements State{
   @Override
   public Collection<State> next() {
     Collection<State> states = new ArrayList<>();
-    Queue<Integer> tempqueue = new LinkedList<Integer>(queue);
-    Stack<Integer> tempstack = (Stack<Integer>)stack.clone();
+    // Queue<Integer> tempqueue = new LinkedList<Integer>(queue);
+    // Stack<Integer> tempstack = (Stack<Integer>)stack.clone();
 
     if (stack.empty()) {
-      int ret = tempqueue.remove();
-      tempstack.push(ret);
-      states.add(new QSState(tempqueue, tempstack, goal, this, 'Q'));    
+      // System.out.println("1");
+      int ret = queue.remove();
+      stack.push(ret);
+      states.add(new QSState(queue, stack, goal, this, 'Q'));    
     }
     else if (queue.peek() == null) {
-      int ret = tempstack.pop();
-      tempqueue.add(ret);
-      states.add(new QSState(tempqueue, tempstack, goal, this, 'S'));    
+      // System.out.println("2");
+      int ret = stack.pop();
+      queue.add(ret);
+      states.add(new QSState(queue, stack, goal, this, 'S'));    
     }
     else if (queue.peek() == stack.peek()) {
-      int ret = tempqueue.remove();
-      tempstack.push(ret);
-      states.add(new QSState(tempqueue, tempstack, goal, this, 'Q'));
+      // System.out.println("3");
+      int ret = queue.remove();
+      stack.push(ret);
+      states.add(new QSState(queue, stack, goal, this, 'Q'));
     }
     else {
       for (int i = 0; i < 2; i++) {
-        tempqueue = new LinkedList<Integer>(queue);
-        tempstack = (Stack<Integer>)stack.clone();
+        Queue<Integer> tempqueue = new LinkedList<Integer>(queue);
+        Stack<Integer> tempstack = (Stack<Integer>)stack.clone();
         if (i == 0) {
+          // System.out.println("4");
           int ret = tempqueue.remove();
           tempstack.push(ret);
           states.add(new QSState(tempqueue, tempstack, goal, this, 'Q'));
         }
         else {
+          // System.out.println("5");
           int ret = tempstack.pop();
           tempqueue.add(ret);
           states.add(new QSState(tempqueue, tempstack, goal, this, 'S'));
@@ -77,22 +82,6 @@ public class QSState implements State{
   public State getPrevious() {
     return previous;
   }
-  
-  // @Override
-  // public String toString() {
-  //   StringBuilder sb = new StringBuilder("Queue: ");
-  //   for (int a : queue){
-  //     sb.append(Integer.toString(a));
-  //     sb.append(",");
-  //   }
-  //   sb.append(" Stack: ");
-  //   for (int a : stack){
-  //     sb.append(Integer.toString(a));
-  //     sb.append(",");
-  //   }
-  //   sb.append(Character.toString(move));
-  //   return sb.toString();
-  // }
 
   @Override
   public String toString() {
@@ -104,9 +93,6 @@ public class QSState implements State{
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     QSState other = (QSState) o;
-    // System.out.println(this.toString());
-    // System.out.println("Checking equality with");
-    // System.out.println(o.toString());
     return queue == other.queue && previous == other.previous && move == other.move;
   }
   
